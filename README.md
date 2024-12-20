@@ -74,7 +74,7 @@ A sophisticated **Facial Recognition Attendance Management System** designed to 
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/attendance-system.git
+   git clone https://github.com/Adityar9764/Attendify.git
    cd attendance-system
    ```
 
