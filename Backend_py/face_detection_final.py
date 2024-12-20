@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 
 port_app = 8000
-app.config["MONGO_URI"] = "mongodb+srv://adityar9764:mz0GbPD9sjUp2tkN@cluster0.b4z1n.mongodb.net/"  # Update with your MongoDB URI
+app.config["MONGO_URI"] = "mongodb+srv://yourmongouri"  # Update with your MongoDB URI
 mongo = PyMongo(app)
 
 client = MongoClient("mongodb+srv://sohom:4iW3Tfhdr0Ndch6P@cluster0.b4z1n.mongodb.net/")
