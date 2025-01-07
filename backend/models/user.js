@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     required: function () {
       return this.role === "Staff";
     },
+    default: null,
   },
   department: {
     type: String,
@@ -20,6 +21,7 @@ const userSchema = new mongoose.Schema({
     required: function () {
       return this.role === "HOD";
     },
+    default: null,
   },
   username: {
     type: String,
@@ -44,5 +46,5 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

@@ -1,9 +1,11 @@
 import express from "express"
 const router = express.Router();
-import { addLeaveDetail, deleteLeaveDetail, getLeaveDetails, getLeaveDetailsByRegistrationNumber } from "../controllers/leaveDetailController.js";
+import { addLeaveDetail, updateAttendanceStatus, deleteLeaveDetail, getLeaveDetails, getLeaveDetailsByRegistrationNumber } from "../controllers/leaveDetailController.js";
 
 // POST: Add leave detail
 router.post("/leave", addLeaveDetail);
+
+router.put("/leave", updateAttendanceStatus);
 
 // GET: Fetch all leave details
 router.get("/leave", getLeaveDetails);

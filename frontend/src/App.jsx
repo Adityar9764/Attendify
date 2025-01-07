@@ -13,6 +13,7 @@ import DashboardFinal from './pages/DashboardFinal';
 import AddStudent from './pages/AddStudent';
 import AddLeaveDetails from './pages/AddleaveDetails';
 import AddAttendanceRecord from './pages/AddAttendanceRecord';
+// import LeaveApplicationForm from './pages/addleave';
 
 const App = () => {
   const location = useLocation();

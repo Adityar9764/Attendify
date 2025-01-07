@@ -23,10 +23,11 @@ const Navbar = () => {
           )
         }
         {
-          role === 'HOD' && (
+          role === 'Staff' && (
             <Link to="/add-user" className="nav-link">Add User</Link>
           )
         }
+
         { role === 'Staff' && (
           <Link to="/studentrecords" className="nav-link">Add Student</Link>
         )}

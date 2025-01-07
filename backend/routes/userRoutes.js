@@ -5,7 +5,6 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// POST /users - Add a new user (only accessible to HODs)
-router.post("/", authMiddleware, addUser);
+router.post("/add-user", addUser);
 
 export default router;

@@ -1,18 +1,24 @@
 // frontend/src/pages/AddUser.jsx
 import React, { useState } from 'react';
 import api from '../utils/axiosConfig';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
-  const [role, setRole] = useState('Student');
+  const [role, setRole] = useState('');
   const [domain, setDomain] = useState('');
   const [department, setDepartment] = useState('');
+  const [ username, setUsername ] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const handleAddUser = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/users', { role, domain, department, password });
+      await axios.post('http://localhost:5000/api/user/add-user', { role, ...(role === "Staff" && { domain }), ...(role === "HOD" && { department }), username, password });
       alert('User added successfully');
+      navigate("/add-user");
     } catch (error) {
       console.error('Error adding user', error);
       alert('Error adding user. Please try again.');
@@ -44,7 +50,7 @@ const AddUser = () => {
           </select>
         </div>
 
-        <div>
+        {role === "Staff" && (<div>
           <label className="block text-gray-700 font-medium mb-2" htmlFor="domain">
             Domain
           </label>
@@ -56,9 +62,9 @@ const AddUser = () => {
             onChange={(e) => setDomain(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
           />
-        </div>
+        </div>)}
 
-        <div>
+        {role === "HOD" && (<div>
           <label className="block text-gray-700 font-medium mb-2" htmlFor="department">
             Department
           </label>
@@ -68,6 +74,20 @@ const AddUser = () => {
             placeholder="Enter Department"
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+          />
+        </div>)}
+
+        <div>
+          <label className="block text-gray-700 font-medium mb-2" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
           />
         </div>

@@ -19,7 +19,8 @@ export const upload = multer({ storage }); // Multer instance
 // Add a new student with images
 export const addStudent = async (req, res) => {
   try {
-    const { name, email, registrationNumber, department, domain, year } = req.body;
+    const { name, email, registrationNumber, department, year } = req.body;
+    const domain = req.user.domain; 
 
     // Get paths of uploaded images
     const images = req.files ? req.files.map((file) => file.path) : [];
@@ -67,7 +68,8 @@ export const addStudent = async (req, res) => {
 // Get all students
 export const getAllStudents = async (req, res) => {
   try {
-    const students = await Student.find();
+    const domain = req.user.domain; // extract domain from the user object
+    const students = await Student.find({domain: domain});
     res.status(200).json(students);
   } catch (error) {
     console.error("Error fetching students:", error);

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddAttendanceRecord = () => {
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     registrationNumber: "",
@@ -14,30 +18,36 @@ const AddAttendanceRecord = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/attendance/add", formData);
+      await axios.post("http://localhost:5000/api/attendance/add", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       alert("Attendance added/updated successfully!");
+      navigate("/attendance-record");
     } catch (error) {
       console.error("Error adding/updating attendance:", error.message);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-blue-500 to-green-400 flex justify-center items-center p-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg p-6 bg-white shadow-md rounded"
+        className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6"
       >
-        <h1 className="text-2xl font-bold text-blue-600 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
           Add Attendance
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid gap-4">
           <input
             type="text"
             name="name"
             placeholder="Name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           />
           <input
             type="text"
@@ -47,7 +57,8 @@ const AddAttendanceRecord = () => {
             onChange={(e) =>
               setFormData({ ...formData, registrationNumber: e.target.value })
             }
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           />
           <input
             type="text"
@@ -57,7 +68,8 @@ const AddAttendanceRecord = () => {
             onChange={(e) =>
               setFormData({ ...formData, department: e.target.value })
             }
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           />
           <input
             type="text"
@@ -67,15 +79,19 @@ const AddAttendanceRecord = () => {
             onChange={(e) =>
               setFormData({ ...formData, domain: e.target.value })
             }
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           />
           <input
             type="date"
             name="date"
             value={formData.date}
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, date: e.target.value })
+            }
             max={new Date().toISOString().split("T")[0]}
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           />
           <select
             name="status"
@@ -83,7 +99,8 @@ const AddAttendanceRecord = () => {
             onChange={(e) =>
               setFormData({ ...formData, status: e.target.value })
             }
-            className="border rounded px-3 py-2 w-full"
+            className="border rounded px-4 py-2 w-full"
+            required
           >
             <option value="">Select Status</option>
             <option value="Present">Present</option>
@@ -91,7 +108,7 @@ const AddAttendanceRecord = () => {
             <option value="Late">Late</option>
           </select>
         </div>
-        <div className="flex justify-center mt-6">
+        <div className="mt-6 flex justify-center">
           <button
             type="submit"
             className="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"

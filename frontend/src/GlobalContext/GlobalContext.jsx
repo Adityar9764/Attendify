@@ -166,24 +166,48 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+
   const addLeaveDetail = async (leaveData) => {
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}student-leavedetail/leave`, leaveData, {
+      const res = await axios.post(`${BASE_URL}/student-leavedetail/leave`, leaveData, {
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
         },
       });
-      showFlashMessage(res.data.message || "Leave detail added successfully", "success");
+  
+      if (res.status === 409) {
+        const userConfirmed = window.confirm(res.data.message);
+        if (userConfirmed) {
+          // If the student is marked as Present, update attendance to "Absent"
+          const updateRes = await axios.put(
+            `${BASE_URL}/student-leavedetail/leave`, 
+            { ...leaveData, forceupdate: true },  // Add forceupdate flag if necessary
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          
+          // Handle success for leave details update
+          showFlashMessage(updateRes.data.message || "Leave detail updated successfully.", "success");
+        } else {
+          showFlashMessage("Leave detail update canceled.", "info");
+        }
+      } else {
+        showFlashMessage(res.data.message || "Leave detail added successfully.", "success");
+      }
     } catch (error) {
-      showFlashMessage(
-        error.response?.data?.message || "Error adding leave detail",
-        "error"
-      );
+      showFlashMessage(error.response?.data?.message || "Error adding leave detail.", "error");
     } finally {
       setLoading(false);
     }
   };
+  
+
   // const [leaveDetails, setLeaveDetails] = ([])
   const getLeaveDetails = async () => {
     try {
@@ -191,6 +215,7 @@ export const GlobalProvider = ({ children }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token from localStorage
         },
       });
   

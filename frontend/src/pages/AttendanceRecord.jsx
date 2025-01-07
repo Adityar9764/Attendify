@@ -8,13 +8,23 @@ const AttendanceRecord = () => {
   const [domainSearch, setDomainSearch] = useState("");
   const [registrationSearch, setRegistrationSearch] = useState("");
   const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
 
 
   const navigate = useNavigate();
 
   const fetchAttendance = async (query = {}) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/attendance");
+
+      const role = localStorage.getItem("role");
+      const domain = localStorage.getItem("domain");
+
+      const response = await axios.get("http://localhost:5000/api/attendance", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in Authorization header
+        },
+      });
       setAttendance(response.data);
     } catch (error) {
       console.error("Error fetching attendance:", error.message);
@@ -22,21 +32,36 @@ const AttendanceRecord = () => {
   };
 
   const handleFetchByRegistration = () => {
-    fetch(`http://localhost:5000/api/attendance/?registrationNumber=${registrationSearch}`)
+    fetch(`http://localhost:5000/api/attendance/?registrationNumber=${registrationSearch}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in Authorization header
+      },
+    })
       .then((res) => res.json())
       .then((data) => setAttendance(data))
       .catch((err) => console.error(err));
   };
   
   const handleFetchByDepartment = () => {
-    fetch(`http://localhost:5000/api/attendance/?department=${departmentSearch}`)
+    fetch(`http://localhost:5000/api/attendance/?department=${departmentSearch}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in Authorization header
+      },
+    })
       .then((res) => res.json())
       .then((data) => setAttendance(data))
       .catch((err) => console.error(err));
   };
   
   const handleFetchByDomain = () => {
-    fetch(`http://localhost:5000/api/attendance/?domain=${domainSearch}`)
+    fetch(`http://localhost:5000/api/attendance/?domain=${domainSearch}` , {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Include the token in Authorization header
+      },
+    })
       .then((res) => res.json())
       .then((data) => setAttendance(data))
       .catch((err) => console.error(err));
@@ -45,7 +70,12 @@ const AttendanceRecord = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/attendance/${id}`);
+      await axios.delete(`http://localhost:5000/api/attendance/${id}` , {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in Authorization header
+        },
+      });
       fetchAttendance();
     } catch (error) {
       console.error("Error deleting record:", error.message);
@@ -88,7 +118,7 @@ const AttendanceRecord = () => {
         </button>
       </div>
 
-      {role === "HOD" && (
+      {/* {role === "HOD" && (
         <div className="flex flex-col sm:flex-row gap-2 sm:items-center w-full sm:w-auto">
           <input
             type="text"
@@ -104,9 +134,9 @@ const AttendanceRecord = () => {
             Search
           </button>
         </div>
-      )}
+      )} */}
 
-      {role === "Staff" && (
+      {/* {role === "Staff" && (
         <div className="flex flex-col sm:flex-row gap-2 sm:items-center w-full sm:w-auto">
           <input
             type="text"
@@ -122,7 +152,7 @@ const AttendanceRecord = () => {
             Search
           </button>
         </div>
-      )}
+      )} */}
 
       <button
         onClick={fetchAttendance}
