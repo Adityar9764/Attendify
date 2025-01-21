@@ -43,7 +43,7 @@ const AddStudent = () => {
     try {
       const response = await axios.post("http://localhost:5000/api/students", form, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });

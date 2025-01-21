@@ -153,8 +153,27 @@ export const updateAttendanceStatus = async (req, res) => {
 
 // Get all leave details
 export const getLeaveDetails = async (req, res) => {
+
+  console.log("Authenticated User:", req.user); 
+
+  const role = req.user.role; // Get role from authenticated user
+  const userDomain = req.user.domain; // Get domain from authenticated user
+  const userDepartment = req.user.department; // Get department from authenticated user
+
   try {
-    const leaveDetails = await LeaveDetail.find();
+
+    let filter = {}; 
+
+    if (role === "HOD") {
+      filter.department = userDepartment; // Restrict HOD to their department
+    } else if (role === "Staff") {
+      filter.domain = userDomain; // Restrict Staff to their domain
+    }
+
+    console.log("Filter:", filter);
+    
+    const leaveDetails = await LeaveDetail.find(filter);
+    console.log(leaveDetails);
     res.status(200).json(leaveDetails);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch leave details", error });
@@ -165,7 +184,7 @@ export const getLeaveDetails = async (req, res) => {
 export const getLeaveDetailsByRegistrationNumber = async (req, res) => {
   try {
     const { registrationNumber } = req.params; // Get registrationNumber from URL parameter
-    console.log("registrationNumber : " , registrationNumber);
+    // console.log("registrationNumber : " , registrationNumber);
     const leaveDetails = await LeaveDetail.find({ registrationNumber : registrationNumber.trim().toLowerCase() }); // Find all leave details with the given registrationNumber
     
     if (!Array.isArray(leaveDetails) || leaveDetails.length === 0) {
