@@ -97,7 +97,7 @@ A sophisticated **Facial Recognition Attendance Management System** designed to 
 5. Start the development servers:
    ```bash
    cd backend
-   npm run dev
+   node index.js
    cd ../frontend
    npm run dev
    ```
